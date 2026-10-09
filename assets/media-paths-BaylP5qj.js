@@ -1,0 +1,1 @@
+function e(e){return typeof e==`string`&&e.length<=240&&/^[a-zA-Z0-9_.\/-]+$/.test(e)&&!e.startsWith(`/`)&&e.split(`/`).every(e=>e&&e!==`.`&&e!==`..`)}function t(t,n){let r=t.assets?.[n],i=t.assetRoot||`rituals/${t.id}`;if(!r||!e(r.file)||!e(i))throw Error(`Unknown or unsafe ritual asset: `+n);return`${i}/${r.file}`}export{e as n,t};

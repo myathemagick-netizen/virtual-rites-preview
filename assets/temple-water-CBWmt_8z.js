@@ -1,0 +1,1 @@
+export{t as templeProjection,n as templeWater}from"./temple-water-BqthWxRm.js";

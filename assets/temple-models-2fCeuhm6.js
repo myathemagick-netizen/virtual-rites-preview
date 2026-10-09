@@ -1,0 +1,1 @@
+export{t as templeModels}from"./temple-models-CTYT6tMe.js";

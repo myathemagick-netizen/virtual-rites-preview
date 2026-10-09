@@ -1,0 +1,1 @@
+export{t as templeFish}from"./temple-fish-BzR7u0c8.js";

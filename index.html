@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Virtual Rites</title>
+<meta name="description" content="Ritual spaces you can step into, in your browser or a VR headset.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Spectral:ital,wght@0,300;0,400;1,300&family=Noto+Serif+Hebrew:wght@500;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/virtual-rites-preview/assets/index-fAPPMD2g.js"></script>
+  <link rel="modulepreload" crossorigin href="/virtual-rites-preview/assets/three.core-Dp-eO7LC.js">
+  <link rel="stylesheet" crossorigin href="/virtual-rites-preview/assets/index-tfZ2QrmT.css">
+</head>
+<body>
+<canvas id="c" aria-label="The ritual space"></canvas>
+
+<!-- HOME ------------------------------------------------------------ -->
+<main id="home" class="screen">
+  <div class="panel">
+    <header class="masthead">
+      <h1>Virtual Rites</h1>
+      <p class="sub">Ritual spaces you can step into</p>
+      <p class="timing" id="timing"></p>
+    </header>
+    <div id="notices"></div>
+    <section>
+      <h2>Choose a rite</h2>
+      <div id="riteList" class="rites" role="list"></div>
+    </section>
+    <section>
+      <h2>Choose a place</h2>
+      <div id="worldList" class="chips" role="group" aria-label="Worlds"></div>
+      <p id="worldBlurb" class="blurb"></p>
+    </section>
+    <div class="row">
+      <button class="primary" id="toIntent">Continue</button>
+      <button id="openJournal">Journal</button>
+      <button id="openSettings">Comfort and access</button>
+    </div>
+  </div>
+</main>
+
+<!-- INTENT ---------------------------------------------------------- -->
+<main id="intent" class="screen off">
+  <div class="panel">
+    <button class="link" data-home>Back</button>
+    <h1 id="intentTitle"></h1>
+    <p class="blurb" id="intentDesc"></p>
+    <p class="meta" id="intentMeta"></p>
+    <label class="field"><span id="intentLabel">Your intent</span>
+      <textarea id="intentText" rows="2" placeholder="What is this working for?"></textarea></label>
+    <div id="sigilBox" class="sigil off">
+      <canvas id="sigilCanvas" width="280" height="280" aria-label="Sigil preview"></canvas>
+      <div>
+        <p class="small">Letters after reduction</p>
+        <p id="sigilLetters" class="letters">·</p>
+        <div class="seg" id="sigilMethod" role="group" aria-label="Sigil construction">
+          <button data-m="wheel" aria-pressed="true">Wheel</button><button data-m="grid" aria-pressed="false">Grid</button>
+        </div>
+        <label class="field"><span>Or use a saved sigil</span><select id="savedSigils"></select></label>
+      </div>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>How you feel going in</span>
+        <select id="stateIn"><option>Calm</option><option>Focused</option><option>Scattered</option><option>Anxious</option><option>Tired</option><option>Energized</option><option>Heavy</option><option>Curious</option></select></label>
+      <label class="field"><span>Energy today</span>
+        <select id="energy"><option value="full">Full</option><option value="some">Some</option><option value="low">Low: shorter and gentler</option></select></label>
+    </div>
+    <div class="field"><span>Mode</span>
+      <div class="seg" id="modeSeg" role="group" aria-label="Mode"><button data-mode="guided" aria-pressed="true">Guided</button><button data-mode="practice" aria-pressed="false">Practice</button></div>
+      <p class="small" id="modeNote"></p></div>
+    <div class="row">
+      <button class="primary" id="beginBtn">Begin</button>
+      <button class="xr off" id="beginVR">Begin in VR</button>
+      <button class="xr off" id="beginMR">Begin in mixed reality</button>
+    </div>
+  </div>
+</main>
+
+<!-- RITE HUD -------------------------------------------------------- -->
+<header id="top" class="off">
+  <div class="brand"><b id="riteName"></b><span id="worldName"></span></div>
+  <nav class="tools" aria-label="Rite settings">
+    <div class="seg" id="camSeg" role="group" aria-label="Camera"><button data-cam="witness">Witness</button><button data-cam="fp">First person</button></div>
+    <button class="chip" id="sndBtn">Sound</button>
+    <button class="chip" id="narBtn">Narration</button>
+    <button class="chip" id="condBtn" aria-expanded="false" aria-controls="conductor">Conductor</button>
+    <button class="chip xr off" id="hudXR">Enter VR</button>
+  </nav>
+</header>
+<section id="stage" class="off">
+  <div id="capBox" aria-live="polite">
+    <p class="phase" id="phaseLabel"></p>
+    <p class="heb" id="heb" dir="rtl" lang="he"></p>
+    <h2 class="word" id="word"></h2>
+    <p class="instr" id="instr"></p>
+  </div>
+  <div class="prog"><div class="fill" id="fill"></div></div>
+  <div class="ctrls">
+    <button id="repeatBtn" title="Replay this element (R)">Repeat</button>
+    <button id="pauseBtn" title="Pause (P)">Pause</button>
+    <button id="markBtn" title="Mark this moment for your journal (M)">Mark</button>
+    <button id="nextBtn" class="primary" title="Next (Space)">Next</button>
+  </div>
+  <span class="count" id="count"></span>
+</section>
+<aside id="conductor" class="drawer off" aria-label="Conductor">
+  <div class="drawer-head"><h2>Conductor</h2><button class="link" id="condClose">Close</button></div>
+  <p class="small">Where you are in the rite. Select any element to go there.</p>
+  <ol id="score" class="score"></ol>
+  <p class="note" id="condNote" role="status"></p>
+  <div class="col">
+    <button id="skipPhaseBtn">Skip to next phase</button>
+    <button id="saveLeaveBtn">Save and leave</button>
+    <button id="endBtn">End the rite now</button>
+  </div>
+</aside>
+
+<!-- AFTER ----------------------------------------------------------- -->
+<main id="after" class="screen off">
+  <div class="panel">
+    <h1>After the rite</h1>
+    <p class="blurb" id="afterSummary"></p>
+    <ul class="facts" id="afterFacts"></ul>
+    <label class="field"><span>Immediate impressions</span><textarea id="impressions" rows="3"></textarea></label>
+    <div class="grid2">
+      <label class="field"><span>What felt significant</span><textarea id="significant" rows="2"></textarea></label>
+      <label class="field"><span>What felt incomplete</span><textarea id="incomplete" rows="2"></textarea></label>
+    </div>
+    <label class="field"><span>How you feel now</span>
+      <select id="stateOut"><option>Calm</option><option>Clear</option><option>Lighter</option><option>Energized</option><option>Unsettled</option><option>Tired</option><option>Moved</option><option>No change</option></select></label>
+    <div class="row"><button class="primary" id="saveEntry">Save to journal</button><button id="discardEntry">Don't save</button></div>
+    <p class="small">Your journal lives only in this browser. Export it from the Journal screen to keep a copy.</p>
+  </div>
+</main>
+
+<!-- JOURNAL --------------------------------------------------------- -->
+<main id="journal" class="screen off">
+  <div class="panel">
+    <button class="link" data-home>Back</button>
+    <h1>Journal</h1>
+    <div class="row">
+      <button id="exportBtn">Export journal</button>
+      <label class="button">Import journal<input type="file" id="importFile" accept="application/json,.json" hidden></label>
+    </div>
+    <div id="entries"></div>
+    <h2>Saved sigils</h2>
+    <div id="sigilLib" class="siglib"></div>
+  </div>
+</main>
+
+<!-- SETTINGS -------------------------------------------------------- -->
+<main id="settings" class="screen off">
+  <div class="panel">
+    <button class="link" data-home>Back</button>
+    <h1>Comfort and access</h1>
+    <p class="blurb">Every setting is saved in this browser and applies to all rites.</p>
+    <div id="settingsForm" class="settings"></div>
+  </div>
+</main>
+
+<div id="toast" class="off" role="status"></div>
+
+</body>
+</html>
