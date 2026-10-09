@@ -1,0 +1,1 @@
+export{t as templeTerrain}from"./temple-terrain-B9PSPSs6.js";
